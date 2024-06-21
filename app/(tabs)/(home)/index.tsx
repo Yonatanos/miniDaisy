@@ -1,11 +1,13 @@
+import { Link } from 'expo-router';
 import { Image, StyleSheet, Platform } from 'react-native';
-
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  console.log(':: HomeScreen');
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -14,11 +16,18 @@ export default function HomeScreen() {
           source={require('@/assets/images/partial-react-logo.png')}
           style={styles.reactLogo}
         />
-      }>
+      }
+    >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Welcome! Jonatan</ThemedText>
         <HelloWave />
       </ThemedView>
+      <Link href="/+sdfjh">
+        <ThemedText type="link">Go to home ERROR!</ThemedText>
+      </Link>
+      <Link href="details">
+        <ThemedText type="link">Go to home Details!</ThemedText>
+      </Link>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>

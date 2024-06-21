@@ -9,26 +9,17 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const RootLayout = () => {
+const HomeLayout = () => {
   const colorScheme = useColorScheme();
-  const [fontLoaded, fontError] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (fontLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontLoaded, fontError]);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="details" />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
   );
 };
 
-export default RootLayout;
+export default HomeLayout;
