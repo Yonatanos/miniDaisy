@@ -1,7 +1,6 @@
 import { Link } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/molecules/ThemedText';
 import Layout from '@/constants/Layout';
 import Strings from '@/constants/Strings';
@@ -62,36 +61,18 @@ export const ResidentPackagesDetails = ({ packages, horizontal, email }: Props) 
 
   const renderScrollView = () => (
     <ScrollView
-      // contentContainerStyle={[{ marginBottom: bottom + Layout.standardGap }]}
       horizontal={horizontal}
       pagingEnabled
-      // scrollEnabled={horizontal && (packages.length > 1)}
       scrollEnabled={false}
       scrollEventThrottle={16}
       showsHorizontalScrollIndicator={false}
-      style={[
-        !horizontal && styles.verticalScrollView,
-        styles.scrollView,
-        // { marginBottom: bottom + Layout.standardGap },
-      ]}
+      style={[!horizontal && styles.verticalScrollView, styles.scrollView]}
     >
       {renderPackages()}
     </ScrollView>
   );
 
   return renderScrollView();
-  return horizontal ? (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-      {renderScrollView()}
-      <View style={{ position: 'absolute' }}>
-        <Link disabled={!email} href={`/residents/${email}`}>
-          <View style={{ backgroundColor: 'green', width: 100 }} />
-        </Link>
-      </View>
-    </View>
-  ) : (
-    renderScrollView()
-  );
 };
 
 const styles = StyleSheet.create({

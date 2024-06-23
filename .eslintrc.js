@@ -78,8 +78,8 @@ module.exports = {
     'react/jsx-indent': [2, 2], //  Validate props indentation in JSX (fixable)
     'react/jsx-key': [2], // Verify there's key for .map, [...] etc
     'react/jsx-equals-spacing': [2, 'never'], // No spaces around the = within jsx props
-    'react/jsx-curly-spacing': [2, { when: 'never', children: true }], // No spaces between curly braces and its child. Child error example: <Hello>{ firstname }</Hello>
-    'react/jsx-curly-brace-presence': [2, { props: 'never', children: 'never' }], // Disallow unnecessary curly braces in JSX. Error example 1: <App>Hello world'}</App>; Error example 2: <App prop={'Hello world'} attr={'foo'} />;
+    'react/jsx-curly-spacing': [2, { when: 'never', children: true }],
+    'react/jsx-curly-brace-presence': [2, { props: 'never', children: 'never' }],
     'object-curly-spacing': [2, 'always'],
     'no-multi-spaces': 2,
     // 'import/no-unused-modules': [1, { unusedExports: true }],
