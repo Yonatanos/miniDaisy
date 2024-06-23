@@ -1,0 +1,7 @@
+{
+  "notificationBuilder": "Dear {{name}}, you have {{itemsCount}} {{itemLabel}} in the mailing room from {{carriers}}. Our service is open daily 7 AM - 10 PM.",
+  "package": "package",
+  "packages": "packages",
+  "customer": "customer",
+  "errorMsg": "Couldn't send the notification. Please try again later."
+}

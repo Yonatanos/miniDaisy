@@ -3,12 +3,12 @@ import { NotificationDateByPackageId, PackagesByResidentId, RecipientPackages } 
 
 interface PackagesState {
   packagesByResidentId: RecipientPackages | {};
-  notificationDateByPackageId: NotificationDateByPackageId;
+  fetchPackagesQueryId: string;
 }
 
 const initialState: PackagesState = {
   packagesByResidentId: {},
-  notificationDateByPackageId: {},
+  fetchPackagesQueryId: 'initialId',
 };
 
 const packagesSlice = createSlice({
@@ -18,13 +18,12 @@ const packagesSlice = createSlice({
     setPackagesByResidentId: (state, action: PayloadAction<PackagesByResidentId>) => {
       state.packagesByResidentId = action.payload;
     },
-    updateNotificationDate: (state, action: PayloadAction<{ id: string; date: Date }>) => {
-      const { id, date } = action?.payload || {};
-      id && date && (state.notificationDateByPackageId[id] = action.payload.date);
+    setFetchPackagesQueryId: (state, action: PayloadAction<string>) => {
+      state.fetchPackagesQueryId = action.payload;
     },
   },
 });
 
-export const { setPackagesByResidentId, updateNotificationDate } = packagesSlice.actions;
+export const { setPackagesByResidentId, setFetchPackagesQueryId } = packagesSlice.actions;
 
 export const packagesReducer = packagesSlice.reducer;

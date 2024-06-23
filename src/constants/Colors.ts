@@ -28,4 +28,5 @@ export const Colors = {
     border: '#3A3D3E',
   },
   daisy: '#2c6757',
+  error: '#Bf1C1C',
 };

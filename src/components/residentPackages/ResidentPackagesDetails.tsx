@@ -1,15 +1,14 @@
-import { email } from '@sideway/address';
 import { Link } from 'expo-router';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/molecules/ThemedText';
 import Layout from '@/constants/Layout';
 import Strings from '@/constants/Strings';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { getTranslation } from '@/translations';
 import { PackageDetails } from '@/types';
-
-const CARD_WIDTH = Layout.maxContentWidth - 3 * Layout.standardGap;
+const CARD_WIDTH = Layout.maxContentWidth - Layout.standardGap;
 
 type Props = {
   packages: PackageDetails[];
@@ -19,27 +18,26 @@ type Props = {
 
 export const ResidentPackagesDetails = ({ packages, horizontal, email }: Props) => {
   const backgroundColor = useThemeColor({}, 'card');
-  const { t } = useTranslation(['scanned']);
+  if (!packages || packages.length === 0) return null;
   const displayVertically = packages.length === 1 || !horizontal;
   const numberOfLines = horizontal ? 1 : null;
   const renderPackages = () =>
-    packages.map((pack, index) => {
-      const {
-        carrier = Strings.EMPTY,
-        type = Strings.EMPTY,
-        name = Strings.EMPTY,
-        id = Strings.EMPTY,
-      } = pack;
-      const recipient = t('scanned:residentPackages.details.to', { name });
-      const from = t('scanned:residentPackages.details.from', { carrier });
-      const size = t('scanned:residentPackages.details.type', { type });
-      const packId = t('scanned:residentPackages.details.id', { id });
+    [...packages, ...packages, ...packages, ...packages, ...packages, ...packages, ...packages].map(
+      (pack, index) => {
+        const {
+          carrier = Strings.EMPTY,
+          type = Strings.EMPTY,
+          name = Strings.EMPTY,
+          id = Strings.EMPTY,
+        } = pack;
+        const recipient = getTranslation('scanned:residentPackages.details.to', { name });
+        const from = getTranslation('scanned:residentPackages.details.from', { carrier });
+        const size = getTranslation('scanned:residentPackages.details.type', { type });
+        const packId = getTranslation('scanned:residentPackages.details.id', { id });
 
-      console.log(':: packages[0]', packages[0]);
-
-      return (
-        <Link disabled={!email || !horizontal} href={`/residents/${email}`} key={index}>
+        return (
           <View
+            key={index}
             style={[
               styles.card,
               index === 0 && styles.cardFirst,
@@ -49,28 +47,50 @@ export const ResidentPackagesDetails = ({ packages, horizontal, email }: Props) 
               !horizontal && { backgroundColor },
             ]}
           >
-            <ThemedText numberOfLines={numberOfLines}>{recipient}</ThemedText>
-            <ThemedText numberOfLines={numberOfLines}>{from}</ThemedText>
-            <ThemedText numberOfLines={numberOfLines}>{size}</ThemedText>
-            <ThemedText numberOfLines={numberOfLines}>{packId}</ThemedText>
+            <Link href={`/residents/${email}`}>
+              <View>
+                <ThemedText numberOfLines={numberOfLines}>{recipient}</ThemedText>
+                <ThemedText numberOfLines={numberOfLines}>{from}</ThemedText>
+                <ThemedText numberOfLines={numberOfLines}>{size}</ThemedText>
+                <ThemedText numberOfLines={numberOfLines}>{packId}</ThemedText>
+              </View>
+            </Link>
           </View>
-        </Link>
-      );
-    });
+        );
+      },
+    );
 
-  return (
-    <View>
-      <ScrollView
-        horizontal={horizontal}
-        pagingEnabled
-        scrollEnabled={horizontal && packages.length > 1}
-        scrollEventThrottle={16}
-        showsHorizontalScrollIndicator={false}
-        style={[styles.scrollView, !horizontal && styles.verticalScrollView]}
-      >
-        {renderPackages()}
-      </ScrollView>
+  const renderScrollView = () => (
+    <ScrollView
+      // contentContainerStyle={[{ marginBottom: bottom + Layout.standardGap }]}
+      horizontal={horizontal}
+      pagingEnabled
+      // scrollEnabled={horizontal && (packages.length > 1)}
+      scrollEnabled={false}
+      scrollEventThrottle={16}
+      showsHorizontalScrollIndicator={false}
+      style={[
+        !horizontal && styles.verticalScrollView,
+        styles.scrollView,
+        // { marginBottom: bottom + Layout.standardGap },
+      ]}
+    >
+      {renderPackages()}
+    </ScrollView>
+  );
+
+  return renderScrollView();
+  return horizontal ? (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+      {renderScrollView()}
+      <View style={{ position: 'absolute' }}>
+        <Link disabled={!email} href={`/residents/${email}`}>
+          <View style={{ backgroundColor: 'green', width: 100 }} />
+        </Link>
+      </View>
     </View>
+  ) : (
+    renderScrollView()
   );
 };
 
@@ -99,7 +119,7 @@ const styles = StyleSheet.create({
   },
   singleItemCard: {
     borderRightWidth: 0,
-    width: CARD_WIDTH - Layout.standardGap,
+    width: CARD_WIDTH + Layout.standardGap,
   },
   lastCard: {
     borderRightWidth: 0,

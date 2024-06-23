@@ -34,7 +34,6 @@ const RootLayout = () => {
               name="(tabs)"
               options={{
                 headerShown: false,
-                title: 'Scanned',
               }}
             />
             <Stack.Screen name="+not-found" />

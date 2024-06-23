@@ -1,11 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableOpacityProps,
+  ActivityIndicator,
+} from 'react-native';
 
 interface ButtonProps extends TouchableOpacityProps {
   text: string;
+  isLoading?: boolean;
 }
 
-export const Button = ({ text, onPress, style = {}, ...props }) => {
+export const Button = ({ text, onPress, style = {}, isLoading, ...props }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -13,7 +20,7 @@ export const Button = ({ text, onPress, style = {}, ...props }) => {
       style={[styles.button, style]}
       {...props}
     >
-      <Text style={styles.text}>{text}</Text>
+      {isLoading ? <ActivityIndicator /> : <Text style={styles.text}>{text}</Text>}
     </TouchableOpacity>
   );
 };

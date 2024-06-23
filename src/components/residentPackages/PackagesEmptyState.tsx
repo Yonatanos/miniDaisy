@@ -1,10 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/molecules/ThemedText';
+import { getTranslation } from '@/translations';
 
 export const PackagesEmptyState = () => {
-  const { t } = useTranslation(['scanned']);
-  const text = t('scanned:residentPackages.emptyList');
+  const text = getTranslation('scanned:residentPackages.emptyList');
 
   return (
     <View style={styles.container}>

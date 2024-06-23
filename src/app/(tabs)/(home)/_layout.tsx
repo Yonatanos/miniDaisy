@@ -19,19 +19,21 @@ const HomeLayout = () => {
           // headerBackground: Colors.daisy,
           headerStyle: { backgroundColor: Colors.daisy }, // Set your desired background color here
           headerTintColor: 'white',
+          animation: 'slide_from_left',
         }}
       >
         <Stack.Screen
           name="index"
           options={{
             headerTitle: 'Scanned',
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
           name="residents/[id]"
           options={{
-            title: 'User Packages',
             headerTitle: 'User Packages',
+            headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen name="+not-found" />

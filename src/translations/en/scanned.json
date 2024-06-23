@@ -13,7 +13,8 @@
     "emptyList": "No packages! Check again later"
   },
   "residents": {
-    "notifyButton": "Send notification"
-  },
+    "notifyButton": "Send notification",
+    "notifyButtonSuccess": "Notification sent!"
+  }
 
 }

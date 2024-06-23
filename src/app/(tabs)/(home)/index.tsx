@@ -1,19 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
-import { StyleSheet, FlatList, View, Text } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { isEmpty } from 'lodash';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { ListSeparator } from '@/components/molecules/ListSeparator';
-import { ThemedText } from '@/components/molecules/ThemedText';
 import { PackagesEmptyState } from '@/components/residentPackages/PackagesEmptyState';
 import { ResidentPackages } from '@/components/residentPackages/residentPackages';
 import Layout from '@/constants/Layout';
-import { getMailRoomScannedItems } from '@/services/mailRoom';
+import { getMailRoomScannedItems, uuid } from '@/services';
+import { setFetchPackagesQueryId } from '@/slices/packagesSlice';
+import { dispatch } from '@/store/store';
 
 export default function HomeScreen() {
-  const { bottom } = useSafeAreaInsets();
   const {
     isFetching,
     data: packagesData = [],
-    isError,
     refetch: refetchMailRoomScannedItems,
   } = useQuery({
     queryKey: ['getMailRoomScannedItems'],
@@ -21,23 +21,32 @@ export default function HomeScreen() {
   });
 
   const renderItem = ({ item, index }) => <ResidentPackages recipientPackages={item} />;
+  const onRefresh = async () => {
+    refetchMailRoomScannedItems();
+    dispatch(setFetchPackagesQueryId(uuid()));
+  };
 
   return (
-    <FlatList
-      ItemSeparatorComponent={ListSeparator}
-      ListEmptyComponent={PackagesEmptyState}
-      contentContainerStyle={[styles.container, { paddingBottom: bottom }]}
-      data={packagesData}
-      onRefresh={refetchMailRoomScannedItems}
-      refreshing={isFetching}
-      renderItem={renderItem}
-      showsVerticalScrollIndicator={false}
-    />
+    <View style={[styles.container]}>
+      <Animated.FlatList
+        ItemSeparatorComponent={ListSeparator}
+        ListEmptyComponent={isFetching ? ActivityIndicator : PackagesEmptyState}
+        contentContainerStyle={[isEmpty(packagesData) && styles.container, styles.paddingBottom]}
+        data={packagesData}
+        onRefresh={onRefresh}
+        refreshing={isFetching}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  paddingBottom: {
+    paddingBottom: Layout.standardGap,
   },
 });

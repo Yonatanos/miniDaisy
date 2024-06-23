@@ -1,7 +1,9 @@
-import { instance } from '@/services/instance';
+import { isString } from 'lodash';
+import { instance } from '@/services/kyInstance';
 import { setPackagesByResidentId } from '@/slices/packagesSlice';
 import { dispatch } from '@/store/store';
-import { ServerPackage } from '@/types';
+import { getTranslation } from '@/translations';
+import { PackageDetails, ServerPackage } from '@/types';
 
 type GetMailRoomScannedItemsResponse = {
   result: {
@@ -195,16 +197,45 @@ export const getMailRoomScannedItems = async () => {
   }
 };
 
-const notifyResidentAboutMail = async (email: string, content: string) => {
+const handleNotificationResponseError = (response: string) => {
+  const isFirstCharNumber = !response || (isString(response) && !isNaN(Number(response[0])));
+  if (!isFirstCharNumber || response[0] === '0')
+    throw new Error('Failed to notify resident about mail');
+};
+
+export const notifyResidentAboutMail = async (email: string, content: string) => {
   try {
-    await instance.post('qru1b8pse4hcr12ojiyala2wigym8h4y', {
-      json: {
-        notify: [{ email, content }],
-      },
-    });
+    const response = await instance
+      .post('qru1b8pse4hcr12ojiyala2wigym8h4y', {
+        json: {
+          notify: [{ email, content }],
+        },
+      })
+      .text();
+
+    // const response = '0';
+    handleNotificationResponseError(response);
+
+    return response;
   } catch (e) {
     console.log('[mailRoomService Error]: notifyResidentAboutMail', e);
 
     throw e;
   }
+};
+
+export const createNotificationContent = (packages: PackageDetails[]) => {
+  const itemsCount = packages.length;
+  const name = packages[0]?.name ?? getTranslation('notification:customer');
+  const itemLabel =
+    itemsCount === 1
+      ? getTranslation('notification:package')
+      : getTranslation('notification:packages');
+
+  return getTranslation('notification:notificationBuilder', {
+    name: name,
+    itemsCount,
+    itemLabel: itemLabel,
+    carriers: packages.map((pack) => `\'${pack.carrier}\'`).join(', '),
+  });
 };

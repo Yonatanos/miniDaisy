@@ -24,4 +24,6 @@ void i18n.use(initReactI18next).init({
   compatibilityJSON: 'v3',
 });
 
+export const getTranslation = (key: string, ns?: { [key: string]: string | number }) =>
+  i18n.t(key, ns);
 export default i18n;
