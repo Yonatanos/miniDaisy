@@ -10,7 +10,7 @@ import { getMailRoomScannedItems, uuid } from '@/services';
 import { setFetchPackagesQueryId } from '@/slices/packagesSlice';
 import { dispatch } from '@/store/store';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const {
     isFetching,
     data: packagesData = [],
@@ -40,7 +40,7 @@ export default function HomeScreen() {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -50,3 +50,5 @@ const styles = StyleSheet.create({
     paddingBottom: Layout.standardGap,
   },
 });
+
+export default HomeScreen;

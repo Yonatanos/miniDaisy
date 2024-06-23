@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getTranslation } from '@/translations';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -15,24 +16,23 @@ const HomeLayout = () => {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack
         screenOptions={{
-          gestureEnabled: false, // Disable swipe gesture
-          // headerBackground: Colors.daisy,
-          headerStyle: { backgroundColor: Colors.daisy }, // Set your desired background color here
-          headerTintColor: 'white',
+          gestureEnabled: false,
+          headerStyle: { backgroundColor: Colors.daisy },
+          headerTintColor: Colors.white,
           animation: 'slide_from_left',
         }}
       >
         <Stack.Screen
           name="index"
           options={{
-            headerTitle: 'Scanned',
+            headerTitle: getTranslation('routing:firstTab'),
             headerTitleAlign: 'center',
           }}
         />
         <Stack.Screen
           name="residents/[id]"
           options={{
-            headerTitle: 'User Packages',
+            headerTitle: getTranslation('routing:residentsPageTitle'),
             headerTitleAlign: 'center',
           }}
         />

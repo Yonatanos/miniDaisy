@@ -3,6 +3,7 @@ import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getTranslation } from '@/translations';
 
 const TabLayout = () => {
   const colorScheme = useColorScheme();
@@ -17,8 +18,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="(home)"
         options={{
-          title: 'Scanned',
-          headerTintColor: 'white',
+          title: getTranslation('routing:firstTab'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon color={color} name={focused ? 'scan' : 'scan-outline'} />
           ),
@@ -27,7 +27,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="notified"
         options={{
-          title: 'Notified',
+          title: getTranslation('routing:secondTab'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon color={color} name={focused ? 'chatbox' : 'chatbox-outline'} />
           ),

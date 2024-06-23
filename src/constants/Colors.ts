@@ -29,4 +29,5 @@ export const Colors = {
   },
   daisy: '#2c6757',
   error: '#Bf1C1C',
+  white: '#FFFFFF',
 };
