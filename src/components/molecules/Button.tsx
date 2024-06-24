@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   TouchableOpacity,
-  Text,
   StyleSheet,
   TouchableOpacityProps,
   ActivityIndicator,
 } from 'react-native';
+import { ThemedText } from '@/components/molecules/ThemedText';
 
 interface ButtonProps extends TouchableOpacityProps {
   text: string;
@@ -20,7 +20,7 @@ export const Button = ({ text, onPress, style = {}, isLoading, ...props }) => {
       style={[styles.button, style]}
       {...props}
     >
-      {isLoading ? <ActivityIndicator /> : <Text style={styles.text}>{text}</Text>}
+      {isLoading ? <ActivityIndicator /> : <ThemedText style={styles.text}>{text}</ThemedText>}
     </TouchableOpacity>
   );
 };
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 16,
     textAlign: 'center',
   },
 });

@@ -36,7 +36,6 @@ const HomeLayout = () => {
             headerTitleAlign: 'center',
           }}
         />
-        <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
   );

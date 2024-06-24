@@ -1,4 +1,8 @@
 {
+  "scannedList": {
+    "title" : "{{packagesCount}} packages are in the mailRoom",
+    "subtitle" : "{{unNotifiedCount}} need to be notified"
+  },
   "residentPackages": {
     "header": "{{packagesCount}} packages are for:\n{{email}}",
     "details": {
@@ -6,6 +10,10 @@
       "from": "From: {{carrier}}",
       "type": "Type: {{type}}",
       "id": "ID: {{id}}"
+    },
+    "status": {
+      "notified": "Notified",
+      "notNotified": "Not notified"
     },
     "emptyList": "No packages! Check again later"
   },

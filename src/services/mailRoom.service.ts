@@ -3,7 +3,7 @@ import { instance } from '@/services/kyInstance';
 import { setPackagesByResidentId } from '@/slices/packagesSlice';
 import { dispatch } from '@/store/store';
 import { getTranslation } from '@/translations';
-import { PackageDetails, ServerPackage } from '@/types';
+import { PackageDetails, PackagesByResidentId, RecipientPackages, ServerPackage } from '@/types';
 
 type GetMailRoomScannedItemsResponse = {
   result: {
@@ -28,7 +28,7 @@ const groupByRecipient = (packages: ServerPackage[]) =>
     return residenceAcc;
   }, {});
 
-export const getMailRoomScannedItems = async () => {
+export const getMailRoomScannedItems = async (): Promise<RecipientPackages[]> => {
   try {
     const response: GetMailRoomScannedItemsResponse = await instance
       .get('icu4lrltnqy8avbhx1iydcmz8x32roya')
@@ -61,14 +61,14 @@ export const notifyResidentAboutMail = async (email: string, content: string) =>
       })
       .text();
 
-    // const response = '0';
     handleNotificationResponseError(response);
 
     return response;
   } catch (e) {
     console.log('[mailRoomService Error]: notifyResidentAboutMail', e);
 
-    throw e;
+    // throw e;
+    return 'error';
   }
 };
 

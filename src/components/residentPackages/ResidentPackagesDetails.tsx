@@ -63,7 +63,7 @@ export const ResidentPackagesDetails = ({ packages, horizontal, email }: Props) 
     <ScrollView
       horizontal={horizontal}
       pagingEnabled
-      scrollEnabled={false}
+      scrollEnabled={horizontal && packages.length > 1}
       scrollEventThrottle={16}
       showsHorizontalScrollIndicator={false}
       style={[!horizontal && styles.verticalScrollView, styles.scrollView]}

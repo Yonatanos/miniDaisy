@@ -2,7 +2,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useRef } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { Button } from '@/components/molecules/Button';
@@ -13,7 +13,8 @@ import { Colors } from '@/constants/Colors';
 import Layout from '@/constants/Layout';
 import Strings from '@/constants/Strings';
 import { createNotificationContent, notifyResidentAboutMail } from '@/services/mailRoom.service';
-import { RootState } from '@/store/store';
+import { addNotifiedPackagesCount, setIsNotified } from '@/slices/packagesSlice';
+import { dispatch, RootState } from '@/store/store';
 import { getTranslation } from '@/translations';
 
 const QUERY_KEY_INIT = 'notifyResidentAboutMail';
@@ -26,8 +27,15 @@ const ResidenceScreen = () => {
     (state: RootState) => state.packages.packagesByResidentId[id] ?? [],
   );
   const packageQueryId = useSelector((state: RootState) => state.packages.fetchPackagesQueryId);
-  const { bottom } = useSafeAreaInsets();
   const queryKey = useRef([`${QUERY_KEY_INIT}${id}${packageQueryId}`]);
+
+  const queryFn = async () => {
+    await notifyResidentAboutMail(id, createNotificationContent(packages));
+    dispatch(addNotifiedPackagesCount(packages.length));
+    dispatch(setIsNotified(id));
+
+    return true;
+  };
 
   const {
     isFetching,
@@ -36,7 +44,7 @@ const ResidenceScreen = () => {
     refetch: sendNotification,
   } = useQuery({
     queryKey: queryKey.current,
-    queryFn: () => notifyResidentAboutMail(id, createNotificationContent(packages)),
+    queryFn,
     enabled: false,
   });
 
@@ -54,7 +62,13 @@ const ResidenceScreen = () => {
   return (
     <ScrollView>
       <ThemedView style={[styles.container, { paddingTop: top }]}>
-        <ResidentPackagesHeader email={id} packages={packages} textStyle={styles.header} />
+        <ResidentPackagesHeader
+          containerStyle={styles.headerContainer}
+          email={id}
+          packages={packages}
+          showIndicator={false}
+          textStyle={styles.headerText}
+        />
         <Button
           disabled={isSuccess}
           isLoading={isFetching}
@@ -78,6 +92,7 @@ const styles = StyleSheet.create({
   button: {
     minWidth: 170,
     borderRadius: 20,
+    marginTop: Layout.smallGap,
   },
   buttonSuccess: {
     backgroundColor: Colors.daisy,
@@ -85,11 +100,15 @@ const styles = StyleSheet.create({
   errorTxt: {
     color: Colors.error,
     fontSize: 14,
-    marginVertical: Layout.smallGap,
+    maxHeight: Layout.standardGap,
+    lineHeight: Layout.standardGap,
     textAlign: 'center',
   },
-  header: {
+  headerText: {
     textAlign: 'center',
+  },
+  headerContainer: {
+    justifyContent: 'center',
   },
 });
 

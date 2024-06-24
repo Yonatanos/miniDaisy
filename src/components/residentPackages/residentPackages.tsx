@@ -1,8 +1,6 @@
-import { Link } from 'expo-router';
 import { isEmpty } from 'lodash';
 import React from 'react';
-import { StyleSheet, Pressable, View, TouchableWithoutFeedback } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { StyleSheet, View } from 'react-native';
 import { ThemedView } from '../molecules/ThemedView';
 import { ResidentPackagesDetails } from './ResidentPackagesDetails';
 import { ResidentPackagesHeader } from './ResidentPackagesHeader';
@@ -24,11 +22,7 @@ export const ResidentPackages = ({ recipientPackages }: Props) => {
     <ThemedView isAnimated pointerEvents="auto" style={[styles.container, { backgroundColor }]}>
       <View pointerEvents="auto">
         <ResidentPackagesHeader email={email} packages={packages} />
-        <ResidentPackagesDetails
-          email={email}
-          horizontal
-          packages={[...packages, ...packages, ...packages, ...packages, ...packages]}
-        />
+        <ResidentPackagesDetails email={email} horizontal packages={packages} />
       </View>
     </ThemedView>
   );
@@ -39,5 +33,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingVertical: Layout.smallGap,
     paddingHorizontal: Layout.standardGap,
+    borderWidth: 1,
   },
 });

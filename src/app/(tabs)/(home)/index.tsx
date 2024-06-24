@@ -1,21 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
 import { isEmpty } from 'lodash';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import Animated from 'react-native-reanimated';
+import { StyleSheet, View, ActivityIndicator, Text, FlatList } from 'react-native';
 import { ListSeparator } from '@/components/molecules/ListSeparator';
+import { ThemedView } from '@/components/molecules/ThemedView';
 import { PackagesEmptyState } from '@/components/residentPackages/PackagesEmptyState';
+import { PackagesListHeader } from '@/components/residentPackages/PackagesListHeader';
 import { ResidentPackages } from '@/components/residentPackages/residentPackages';
 import Layout from '@/constants/Layout';
 import { getMailRoomScannedItems, uuid } from '@/services';
-import { setFetchPackagesQueryId } from '@/slices/packagesSlice';
+import { clearNotifiedPackagesCount, setFetchPackagesQueryId } from '@/slices/packagesSlice';
 import { dispatch } from '@/store/store';
+import { RecipientPackages } from '@/types';
 
 const HomeScreen = () => {
   const {
     isFetching,
     data: packagesData = [],
     refetch: refetchMailRoomScannedItems,
-  } = useQuery({
+  } = useQuery<RecipientPackages[]>({
     queryKey: ['getMailRoomScannedItems'],
     queryFn: getMailRoomScannedItems,
   });
@@ -24,13 +26,22 @@ const HomeScreen = () => {
   const onRefresh = async () => {
     refetchMailRoomScannedItems();
     dispatch(setFetchPackagesQueryId(uuid()));
+    dispatch(clearNotifiedPackagesCount());
   };
+
+  if (isFetching)
+    return (
+      <ThemedView style={styles.fetchingContainer}>
+        <ActivityIndicator size="large" />
+      </ThemedView>
+    );
 
   return (
     <View style={[styles.container]}>
-      <Animated.FlatList
+      <FlatList
         ItemSeparatorComponent={ListSeparator}
         ListEmptyComponent={isFetching ? ActivityIndicator : PackagesEmptyState}
+        ListHeaderComponent={!isFetching && <PackagesListHeader recipientPackages={packagesData} />}
         contentContainerStyle={[isEmpty(packagesData) && styles.container, styles.paddingBottom]}
         data={packagesData}
         onRefresh={onRefresh}
@@ -48,6 +59,11 @@ const styles = StyleSheet.create({
   },
   paddingBottom: {
     paddingBottom: Layout.standardGap,
+  },
+  fetchingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

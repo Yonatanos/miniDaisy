@@ -19,6 +19,7 @@ export type PackageDetails = {
 
 export type RecipientPackages = {
   email: string;
+  isNotified: boolean;
   packages: PackageDetails[];
 };
 
